@@ -3,6 +3,7 @@ package main
 /**
 本节练习leecode_Hot100里的经典题
 1.字母异位词分组
+2.最长连续序列
 */
 import (
 	"fmt"
@@ -11,6 +12,7 @@ import (
 
 func main() {
 	fmt.Println(groupAnagrams([]string{"eat", "tea", "tan", "ate", "nat", "bat"}))
+	fmt.Println(longestConsecutive([]int{0, 1, 2, 4, 8, 5, 6, 7, 9, 3, 55, 88, 77, 99, 999999999}))
 }
 
 /*
@@ -45,4 +47,37 @@ func sortString(s string) string {
 		result += s2
 	}
 	return result
+}
+
+/*
+2.最长连续序列
+这是本题的标准 O(N) 解法。
+思路：1.去重与查询： 将所有数字放入一个 Map 中。
+
+	2.只找“开头”： 遍历 Map 中的数字。如果一个数字 x，在 Map 中存在 x-1，说明 x 不是连续序列的起点，直接跳过（因为我们会在处理 x-1 或更前面的数时计算到 x）。
+	3.计算长度： 如果 x-1 不存在，说明 x 是起点。通过 while 循环检查 x+1, x+2 是否存在，直到断开。
+*/
+func longestConsecutive(nums []int) int {
+	has := make(map[int]bool, len(nums))
+
+	for i := 0; i < len(nums); i++ {
+		has[nums[i]] = true
+	}
+
+	var result = 0
+	for x := range has {
+		if has[x-1] { //如果它不是起点
+			continue
+		}
+
+		y := x + 1
+		for has[y] { //遍历以x开头连续的所有元素，并以y+1结尾
+			y++
+		}
+		if y-x > result {
+			result = y - x
+		}
+	}
+	return result
+
 }
