@@ -4,15 +4,16 @@ package main
 本节练习leecode_Hot100里的经典题
 1.字母异位词分组
 2.最长连续序列
+3.乘最多水的容器_ac（双指针）
 */
 import (
-	"fmt"
 	"slices"
 )
 
 func main() {
-	fmt.Println(groupAnagrams([]string{"eat", "tea", "tan", "ate", "nat", "bat"}))
-	fmt.Println(longestConsecutive([]int{0, 1, 2, 4, 8, 5, 6, 7, 9, 3, 55, 88, 77, 99, 999999999}))
+	//fmt.Println(groupAnagrams([]string{"eat", "tea", "tan", "ate", "nat", "bat"}))
+	//fmt.Println(longestConsecutive([]int{0, 1, 2, 4, 8, 5, 6, 7, 9, 3, 55, 88, 77, 99, 999999999}))
+	//fmt.Println(maxArea([]int{1, 8, 6, 2, 5, 4, 8, 3, 7}))
 }
 
 /*
@@ -81,3 +82,8 @@ func longestConsecutive(nums []int) int {
 	return result
 
 }
+
+/*
+3.乘最多水的容器 func maxArea(height []int) int;
+解题思路：暴力或双指针 _一次ac
+*/
