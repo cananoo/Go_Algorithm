@@ -5,15 +5,18 @@ package main
 1.字母异位词分组
 2.最长连续序列
 3.乘最多水的容器_ac（双指针）
+4.三数和为零
 */
 import (
+	"fmt"
 	"slices"
 )
 
 func main() {
 	//fmt.Println(groupAnagrams([]string{"eat", "tea", "tan", "ate", "nat", "bat"}))
 	//fmt.Println(longestConsecutive([]int{0, 1, 2, 4, 8, 5, 6, 7, 9, 3, 55, 88, 77, 99, 999999999}))
-	//fmt.Println(maxArea([]int{1, 8, 6, 2, 5, 4, 8, 3, 7}))
+	fmt.Println(threeSum([]int{-1, 0, 1, 2, -1, -4}))
+
 }
 
 /*
@@ -85,5 +88,63 @@ func longestConsecutive(nums []int) int {
 
 /*
 3.乘最多水的容器 func maxArea(height []int) int;
-解题思路：暴力或双指针 _一次ac
+解题思路：暴力或双指针（优先移动短板指针） _一次ac
 */
+
+/*
+4.三数之和为零
+思路：
+1.对数组进行排序。
+2.遍历排序后数组：
+若 nums[i]>0：因为已经排序好，所以后面不可能有三个数加和等于 0，直接返回结果。
+对于重复元素：跳过，避免出现重复解
+令左指针 L=i+1，右指针 R=n−1，当 L<R 时，执行循环：
+        当nums[i]+nums[L]+nums[R]==0，执行循环，判断左界和右界是否和下一位置重复，去除重复解。并同时将 L,R 移到下一位置，寻找新的解
+        若和大于 0，说明 nums[R] 太大，R 左移
+        若和小于 0，说明 nums[L] 太小，L 右移
+* 主要记住固定元素i，按和与0的大小比较决定双指针移向,麻烦点在于去重_一个是固定点i的去重;一个是组合l_r的去重
+*/
+
+func threeSum(nums []int) [][]int {
+	slices.Sort(nums)
+	fmt.Println(nums)
+	var result = [][]int{}
+
+	for i := 0; i < len(nums)-2; i++ {
+		// 去重i_重复
+		if i != 0 && nums[i] == nums[i-1] {
+			continue
+		}
+
+		var l = i + 1
+		var r = len(nums) - 1
+
+		for l < r {
+			if nums[l]+nums[r]+nums[i] == 0 {
+				//只有不跳过时增加
+
+				temp := []int{}
+				temp = append(temp, nums[l], nums[i], nums[r])
+				result = append(result, temp)
+
+				// 去重组合l_r
+				valL := nums[l]
+				valR := nums[r]
+				for l < r && nums[l] == valL {
+					l++
+				}
+				for l < r && nums[r] == valR {
+					r--
+				}
+
+			} else if nums[l]+nums[r]+nums[i] > 0 {
+				r--
+			} else {
+
+				l++
+			}
+		}
+
+	}
+	return result
+}
