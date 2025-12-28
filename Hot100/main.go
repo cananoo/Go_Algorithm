@@ -6,6 +6,9 @@ package main
 2.最长连续序列
 3.乘最多水的容器_ac（双指针）
 4.三数和为零
+接雨水 （暴力ac_层序遍历到最高点）
+无重复字符的最长子串 (ac_单向遍历+遇重，起点跳前一个重后)
+5.找到字符串中所有字母异位词
 */
 import (
 	"fmt"
@@ -15,7 +18,8 @@ import (
 func main() {
 	//fmt.Println(groupAnagrams([]string{"eat", "tea", "tan", "ate", "nat", "bat"}))
 	//fmt.Println(longestConsecutive([]int{0, 1, 2, 4, 8, 5, 6, 7, 9, 3, 55, 88, 77, 99, 999999999}))
-	fmt.Println(threeSum([]int{-1, 0, 1, 2, -1, -4}))
+	//fmt.Println(threeSum([]int{-1, 0, 1, 2, -1, -4}))
+	//fmt.Println(findAnagrams("cbaebabacd", "abc"))
 
 }
 
@@ -109,24 +113,18 @@ func threeSum(nums []int) [][]int {
 	slices.Sort(nums)
 	fmt.Println(nums)
 	var result = [][]int{}
-
 	for i := 0; i < len(nums)-2; i++ {
 		// 去重i_重复
 		if i != 0 && nums[i] == nums[i-1] {
 			continue
 		}
-
 		var l = i + 1
 		var r = len(nums) - 1
-
 		for l < r {
 			if nums[l]+nums[r]+nums[i] == 0 {
-				//只有不跳过时增加
-
 				temp := []int{}
 				temp = append(temp, nums[l], nums[i], nums[r])
 				result = append(result, temp)
-
 				// 去重组合l_r
 				valL := nums[l]
 				valR := nums[r]
@@ -136,7 +134,6 @@ func threeSum(nums []int) [][]int {
 				for l < r && nums[r] == valR {
 					r--
 				}
-
 			} else if nums[l]+nums[r]+nums[i] > 0 {
 				r--
 			} else {
@@ -144,7 +141,38 @@ func threeSum(nums []int) [][]int {
 				l++
 			}
 		}
+	}
+	return result
+}
 
+/*
+5.找到字符串中所有字母异位词
+解题思路：遍历-细节：用字母计数数组判断异位词，这样窗口移动的时候只需要加减前一项及后一项的数，进行新的判断。因为go数组是值类型，可以直接用==号判断相等性。
+*/
+func findAnagrams(s string, p string) []int {
+	var result = []int{}
+	if len(s) < len(p) {
+		return result
+	}
+	cntP := [26]int{}
+	for i := 0; i < len(p); i++ {
+		cntP[p[i]-'a'] += 1
+	}
+	cntS := [26]int{}
+	for i := 0; i < len(p); i++ {
+		cntS[s[i]-'a'] += 1
+	}
+
+	if cntS == cntP {
+		result = append(result, 0)
+	}
+
+	for i := 1; i <= len(s)-len(p); i++ {
+		cntS[s[i-1]-'a'] -= 1
+		cntS[s[i+len(p)-1]-'a'] += 1
+		if cntS == cntP {
+			result = append(result, i)
+		}
 	}
 	return result
 }
