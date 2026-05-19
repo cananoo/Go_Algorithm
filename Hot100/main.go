@@ -20,6 +20,7 @@ func main() {
 	//fmt.Println(longestConsecutive([]int{0, 1, 2, 4, 8, 5, 6, 7, 9, 3, 55, 88, 77, 99, 999999999}))
 	//fmt.Println(threeSum([]int{-1, 0, 1, 2, -1, -4}))
 	//fmt.Println(findAnagrams("cbaebabacd", "abc"))
+	fmt.Println(subarraySum([]int{1, 2, 3}, 3))
 
 }
 
@@ -175,4 +176,29 @@ func findAnagrams(s string, p string) []int {
 		}
 	}
 	return result
+}
+
+/*
+6.给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。
+子数组是数组中元素的连续非空序列。
+
+思路：前缀和 + map ; 令prefix[sum]为某索引j所有前缀和的统计计数，到下一个索引j+1后更新当前sum，并计算sum - k 的前缀组合数;后更新prefix[];
+一次遍历即可得到最终计数，时间复杂度O(1)
+*/
+func subarraySum(nums []int, k int) int {
+	// 结果
+	count := 0
+	// 构造前缀和
+	prefix := make(map[int]int)
+	sum := 0
+	// 记录从索引0开始到len结束的前缀和,一次遍历
+	for i := 0; i < len(nums); i++ {
+		sum += nums[i]
+		if sum == k {
+			count++
+		}
+		count += prefix[sum-k]
+		prefix[sum] += 1
+	}
+	return count
 }
