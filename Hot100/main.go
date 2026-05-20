@@ -12,6 +12,7 @@ package main
 */
 import (
 	"fmt"
+	"math"
 	"slices"
 )
 
@@ -20,8 +21,8 @@ func main() {
 	//fmt.Println(longestConsecutive([]int{0, 1, 2, 4, 8, 5, 6, 7, 9, 3, 55, 88, 77, 99, 999999999}))
 	//fmt.Println(threeSum([]int{-1, 0, 1, 2, -1, -4}))
 	//fmt.Println(findAnagrams("cbaebabacd", "abc"))
-	fmt.Println(subarraySum([]int{1, 2, 3}, 3))
-
+	//fmt.Println(subarraySum([]int{1, 2, 3}, 3))
+	fmt.Println(maxSubArray([]int{-2, 1, -3, 4, -1, 2, 1, -5, 4}))
 }
 
 /*
@@ -201,4 +202,27 @@ func subarraySum(nums []int, k int) int {
 		prefix[sum] += 1
 	}
 	return count
+}
+
+/*
+最大子数组和
+思路： 最小前缀和 ； 一次遍历时就不断更新每个索引位置前的最小前缀和，用该位置的前缀和减去该位置的最小前缀和就是该区间内的最大子数组和;
+*/
+func maxSubArray(nums []int) int {
+	// 结果
+	res := math.MinInt
+	// 最小前缀和
+	minPrefix := 0
+	sum := 0
+	for i := 0; i < len(nums); i++ {
+		sum += nums[i]
+		temp := sum - minPrefix
+		if temp > res {
+			res = temp
+		}
+		if sum < minPrefix {
+			minPrefix = sum
+		}
+	}
+	return res
 }
