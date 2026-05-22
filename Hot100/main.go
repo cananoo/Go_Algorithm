@@ -22,7 +22,8 @@ func main() {
 	//fmt.Println(threeSum([]int{-1, 0, 1, 2, -1, -4}))
 	//fmt.Println(findAnagrams("cbaebabacd", "abc"))
 	//fmt.Println(subarraySum([]int{1, 2, 3}, 3))
-	fmt.Println(maxSubArray([]int{-2, 1, -3, 4, -1, 2, 1, -5, 4}))
+	//fmt.Println(maxSubArray([]int{-2, 1, -3, 4, -1, 2, 1, -5, 4}))
+	fmt.Println(merge([][]int{{1, 4}, {0, 2}, {3, 5}}))
 }
 
 /*
@@ -205,7 +206,7 @@ func subarraySum(nums []int, k int) int {
 }
 
 /*
-最大子数组和
+7.最大子数组和
 思路： 最小前缀和 ； 一次遍历时就不断更新每个索引位置前的最小前缀和，用该位置的前缀和减去该位置的最小前缀和就是该区间内的最大子数组和;
 */
 func maxSubArray(nums []int) int {
@@ -222,6 +223,39 @@ func maxSubArray(nums []int) int {
 		}
 		if sum < minPrefix {
 			minPrefix = sum
+		}
+	}
+	return res
+}
+
+/*
+合并区间(已AC)
+*SortFunc的用法
+*/
+func merge(intervals [][]int) [][]int {
+	// 上一个的尾
+	tail := 0
+
+	// 结果
+	res := [][]int{}
+
+	//按头排序
+	slices.SortFunc(intervals, func(a, b []int) int {
+		return a[0] - b[0]
+	})
+
+	//合并
+	res = append(res, intervals[0])
+	tail = intervals[0][1]
+	for i := 1; i < len(intervals); i++ {
+		if intervals[i][0] > tail {
+			res = append(res, intervals[i])
+			tail = intervals[i][1]
+		} else if intervals[i][1] > tail {
+			res[len(res)-1][1] = intervals[i][1]
+			tail = intervals[i][1]
+		} else {
+			continue
 		}
 	}
 	return res
