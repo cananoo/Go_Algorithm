@@ -23,7 +23,8 @@ func main() {
 	//fmt.Println(findAnagrams("cbaebabacd", "abc"))
 	//fmt.Println(subarraySum([]int{1, 2, 3}, 3))
 	//fmt.Println(maxSubArray([]int{-2, 1, -3, 4, -1, 2, 1, -5, 4}))
-	fmt.Println(merge([][]int{{1, 4}, {0, 2}, {3, 5}}))
+	//fmt.Println(merge([][]int{{1, 4}, {0, 2}, {3, 5}}))
+	rotate([]int{1, 2, 3, 4, 5, 6, 7}, 3)
 }
 
 /*
@@ -259,4 +260,17 @@ func merge(intervals [][]int) [][]int {
 		}
 	}
 	return res
+}
+
+/*
+旋转数组
+nums = temp → 改的是【变量指向】，对外面无效
+copy(nums, temp) → 改的是【底层数据】，对外面有效
+*/
+func rotate(nums []int, k int) {
+	temp := make([]int, len(nums))
+	for i := 0; i < len(nums); i++ {
+		temp[(i+k)%len(nums)] = nums[i]
+	}
+	copy(nums, temp)
 }
