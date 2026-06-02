@@ -24,7 +24,8 @@ func main() {
 	//fmt.Println(subarraySum([]int{1, 2, 3}, 3))
 	//fmt.Println(maxSubArray([]int{-2, 1, -3, 4, -1, 2, 1, -5, 4}))
 	//fmt.Println(merge([][]int{{1, 4}, {0, 2}, {3, 5}}))
-	rotate([]int{1, 2, 3, 4, 5, 6, 7}, 3)
+	//rotate([]int{1, 2, 3, 4, 5, 6, 7}, 3)
+	fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 20))
 }
 
 /*
@@ -273,4 +274,37 @@ func rotate(nums []int, k int) {
 		temp[(i+k)%len(nums)] = nums[i]
 	}
 	copy(nums, temp)
+}
+
+/*
+搜索二维矩阵
+思路：二叉排序树  以右上角元素为跟向左向右进行搜索
+*/
+func searchMatrix(matrix [][]int, target int) bool {
+	row := len(matrix)
+	if row == 0 {
+		return false
+	}
+	col := len(matrix[0])
+
+	// 初始root位置
+	i := 0
+	j := col - 1
+	for {
+		var flag = false
+		if matrix[i][j] == target {
+			return true
+		}
+		if matrix[i][j] < target && i < row-1 {
+			i++
+			flag = true
+		}
+		if matrix[i][j] > target && j > 0 {
+			j--
+			flag = true
+		}
+		if !flag {
+			return flag
+		}
+	}
 }
