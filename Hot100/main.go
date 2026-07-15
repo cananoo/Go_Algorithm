@@ -25,7 +25,18 @@ func main() {
 	//fmt.Println(maxSubArray([]int{-2, 1, -3, 4, -1, 2, 1, -5, 4}))
 	//fmt.Println(merge([][]int{{1, 4}, {0, 2}, {3, 5}}))
 	//rotate([]int{1, 2, 3, 4, 5, 6, 7}, 3)
-	fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 20))
+	//fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 20))
+	// 构建 root = \[1,2,2,null,3,null,3\]
+	root := &TreeNode{Val: 1}
+	// 左子树2
+	root.Left = &TreeNode{Val: 2}
+	root.Left.Right = &TreeNode{Val: 3}
+	// 右子树2
+	root.Right = &TreeNode{Val: 2}
+	root.Right.Right = &TreeNode{Val: 3}
+
+	res := isSymmetric(root)
+	fmt.Println(res)
 }
 
 /*
@@ -277,7 +288,7 @@ func rotate(nums []int, k int) {
 }
 
 /*
-搜索二维矩阵
+8.搜索二维矩阵
 思路：二叉排序树  以右上角元素为跟向左向右进行搜索
 */
 func searchMatrix(matrix [][]int, target int) bool {
@@ -307,4 +318,27 @@ func searchMatrix(matrix [][]int, target int) bool {
 			return flag
 		}
 	}
+}
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+/*
+9.对称二叉树
+思路: 递归判断每个节点位置 与其 相对应的 镜像节点位置上的val是否相同
+*/
+func isSymmetric(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	return mirror(root.Left, root.Right)
+}
+func mirror(left *TreeNode, right *TreeNode) bool {
+	if left == nil || right == nil {
+		return left == right
+	}
+	return left.Val == right.Val && mirror(left.Left, right.Right) && mirror(left.Right, right.Left)
 }
