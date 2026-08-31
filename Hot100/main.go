@@ -26,17 +26,10 @@ func main() {
 	//fmt.Println(merge([][]int{{1, 4}, {0, 2}, {3, 5}}))
 	//rotate([]int{1, 2, 3, 4, 5, 6, 7}, 3)
 	//fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 20))
-	// 构建 root = \[1,2,2,null,3,null,3\]
-	root := &TreeNode{Val: 1}
-	// 左子树2
-	root.Left = &TreeNode{Val: 2}
-	root.Left.Right = &TreeNode{Val: 3}
-	// 右子树2
-	root.Right = &TreeNode{Val: 2}
-	root.Right.Right = &TreeNode{Val: 3}
 
-	res := isSymmetric(root)
-	fmt.Println(res)
+	x := [][]int{{1, 0}, {1, 2}, {0, 1}}
+	println(canFinish(3, x))
+
 }
 
 /*
@@ -341,4 +334,44 @@ func mirror(left *TreeNode, right *TreeNode) bool {
 		return left == right
 	}
 	return left.Val == right.Val && mirror(left.Left, right.Right) && mirror(left.Right, right.Left)
+}
+
+/*
+10. 课程表
+思路： 判断是否有环
+得先构造有向图（得用邻接表）-同时需要检测入度状态和出度数量减少时间复杂度
+*/
+func canFinish(numCourses int, prerequisites [][]int) bool {
+	// 构造邻接表和统计节点出度数
+	graph := make([][]int, numCourses)
+	indegree := make([]int, numCourses)
+	for i := range numCourses {
+		graph[i] = make([]int, 0, numCourses)
+	}
+	for _, prerequisite := range prerequisites {
+		graph[prerequisite[1]] = append(graph[prerequisite[1]], prerequisite[0])
+		indegree[prerequisite[0]]++
+	}
+	// 初始出度为0的节点
+	queue := make([]int, 0, numCourses)
+	for i := 0; i < numCourses; i++ {
+		if indegree[i] == 0 {
+			queue = append(queue, i)
+		}
+	}
+	// 记录可完成学科
+	finished := 0
+	for i := 0; i < len(queue); i++ {
+		prerequisite := queue[i]
+		finished++
+		// 更新课程出度数
+		courses := graph[prerequisite]
+		for j := 0; j < len(courses); j++ {
+			indegree[courses[j]]--
+			if indegree[courses[j]] == 0 {
+				queue = append(queue, courses[j])
+			}
+		}
+	}
+	return finished == numCourses
 }
