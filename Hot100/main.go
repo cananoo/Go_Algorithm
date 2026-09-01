@@ -27,8 +27,7 @@ func main() {
 	//rotate([]int{1, 2, 3, 4, 5, 6, 7}, 3)
 	//fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 20))
 
-	x := [][]int{{1, 0}, {1, 2}, {0, 1}}
-	println(canFinish(3, x))
+	fmt.Println(permute([]int{1, 2, 3}))
 
 }
 
@@ -374,4 +373,32 @@ func canFinish(numCourses int, prerequisites [][]int) bool {
 		}
 	}
 	return finished == numCourses
+}
+
+// AC - 很有教育意义
+func permute(nums []int) [][]int {
+	result := [][]int{}
+	sample := []int{}
+	choosePositon(&sample, &nums, &result)
+	return result
+
+}
+
+func choosePositon(sample *[]int, nums *[]int, result *[][]int) {
+	for i := range *nums {
+		// 第一个选i
+		temp := (*nums)[i]
+		*sample = append(*sample, temp)
+		*nums = slices.Delete(*nums, i, i+1)
+		if len(*nums) == 0 {
+			oh := make([]int, len(*sample))
+			copy(oh, *sample)
+			*result = append(*result, oh)
+		}
+		//选下一个
+		choosePositon(sample, nums, result)
+		// 不选i
+		*sample = (*sample)[:len(*sample)-1]
+		*nums = slices.Insert(*nums, i, temp)
+	}
 }
