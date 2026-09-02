@@ -27,7 +27,7 @@ func main() {
 	//rotate([]int{1, 2, 3, 4, 5, 6, 7}, 3)
 	//fmt.Println(searchMatrix([][]int{{1, 4, 7, 11, 15}, {2, 5, 8, 12, 19}, {3, 6, 9, 16, 22}, {10, 13, 14, 17, 24}, {18, 21, 23, 26, 30}}, 20))
 
-	fmt.Println(permute([]int{1, 2, 3}))
+	fmt.Println(subsets([]int{1, 2, 3}))
 
 }
 
@@ -400,5 +400,34 @@ func choosePositon(sample *[]int, nums *[]int, result *[][]int) {
 		// 不选i
 		*sample = (*sample)[:len(*sample)-1]
 		*nums = slices.Insert(*nums, i, temp)
+	}
+}
+
+// AC - 同样很有教育意义
+func subsets(nums []int) [][]int {
+	result := [][]int{}
+	sample := []int{}
+	getSubSets(nums, sample, &result)
+	// 空集是任何集合的子集
+	temp := []int{}
+	result = append(result, temp)
+	return result
+}
+
+func getSubSets(nums []int, sample []int, result *[][]int) {
+	for i, x := range nums {
+		// 要当前这个
+		i2 := x
+		sample = append(sample, i2)
+		temp := make([]int, len(sample))
+		copy(temp, sample)
+		*result = append(*result, temp)
+		// 下一轮挑选
+		newN := nums[i+1:]
+		getSubSets(newN, sample, result)
+
+		// 不要当前这个
+		sample = sample[:len(sample)-1]
+
 	}
 }
